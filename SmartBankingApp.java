@@ -184,8 +184,72 @@ public class SmartBankingApp {
 
     public static void transferMoney(String title) {
         appTitle(title);
+        String fromAccountNumber;
+        int indexFrom;
+        do{
+            System.out.print("\tEnter the From Account Number : ");
+            fromAccountNumber = SCANNER.nextLine().toUpperCase().strip();
+            indexFrom = accountNumberSearch(fromAccountNumber);
+        } while (indexFrom == -1);
+
+        String toAccountNumber;
+        int indexTo;
+        do{
+            System.out.print("\tEnter the To Account Number : ");
+            toAccountNumber = SCANNER.nextLine().toUpperCase().strip();
+            indexTo = accountNumberSearch(toAccountNumber);
+        } while (indexTo == -1);
+
+        double fromAccBalance = Double.valueOf(bankAccounts[indexFrom][2]);
+        double toAccBalance = Double.valueOf(bankAccounts[indexTo][2]);
+
+        System.out.printf("\tFrom Account Holder : %s\n",bankAccounts[indexFrom][1]);
+        System.out.printf("\tFrom Account Current Balance : Rs.%,.2f\n",fromAccBalance);
+        System.out.println();
+        System.out.printf("\tTo Account Holder : %s\n",bankAccounts[indexTo][2]);
+        System.out.printf("\tTo Account Current Balance : Rs.%,.2f\n",toAccBalance);
+
+        boolean valid;
+        double amount;
+        do {
+            valid = true;
+            System.out.print("\n\tEnter Your Transfer Amount : ");
+            amount = SCANNER.nextDouble();
+            SCANNER.nextLine();
+            
+            if(amount < 100) {
+                System.out.printf(ERROR_MSG, "Invalid transfer, transfer should be more than Rs.100/=");
+                valid = false;
+                continue;
+            }
+            if(((fromAccBalance - amount) - (0.02 * amount)) < 500){
+                System.out.printf(ERROR_MSG, "Invalid transfer, Remaining balance should be more than Rs.500/=");
+                valid = false;
+                continue;
+            }
+        } while (!valid);
+
+        double newFromAccBalance = fromAccBalance - (amount + (0.02 * amount));
+        double newToAccBalance = toAccBalance + amount;
+        
+        bankAccounts[indexFrom][2] = String.valueOf(newFromAccBalance);
+        bankAccounts[indexTo][2] = String.valueOf(newToAccBalance);
+
+        System.out.printf("\tFrom Account New Balance : Rs.%,.2f\n",newFromAccBalance);
+        System.out.printf("\tTo Account New Balance : Rs.%,.2f\n",newToAccBalance);
+        System.out.println();
+        System.out.printf(SUCCESS_MSG, "Money Transfer Successfull! (2% bank chargers deducted)");
+        
+        System.out.print("\tDo you want to continue transfer (Y/n)? ");
+        if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) {
+            transferMoney("Transfer Money");
+        }else {
+            dashboard("Welcome to Smart Banking App");
+        }
+        
     }
     
+
     public static void checkBalance(String title) {
         appTitle(title);
     }
