@@ -12,6 +12,7 @@ public class SmartBankingApp {
     private static final String SUCCESS_MSG = String.format("\t%s%s%s\n", COLOR_GREEN_BOLD, "%s", RESET);
     public static void main(String[] args) {
         dashboard("Welcome to Smart Banking App");
+        
     }
 
     public static void dashboard(String title) {
@@ -89,6 +90,46 @@ public class SmartBankingApp {
 
     public static void depositMoney(String title) {
         appTitle(title);
+        String accNumber;
+        int index;
+        do{
+            System.out.print("\tEnter the Account Number : ");
+            accNumber = SCANNER.nextLine().toUpperCase().strip();
+            index = accountNumberSearch(accNumber);
+        } while (index == -1);
+        
+        System.out.printf("\tAccount Holder : %s\n",bankAccounts[index][1]);
+        System.out.printf("\tCurrent Balance : Rs.%,.2f\n",Double.valueOf(bankAccounts[index][2]));
+
+        boolean valid;
+        double amount;
+        do {
+            valid = true;
+            System.out.print("\tEnter Your Deposit Amount : ");
+            
+            amount = SCANNER.nextDouble();
+            SCANNER.nextLine();
+                        
+            if (amount < 500) {
+                System.out.printf(ERROR_MSG, "Insufficient Amount, Should be more than Rs.500/=");
+                valid = false;
+                continue;
+            }
+        } while (!valid);
+
+        double currentBalance = Double.valueOf(bankAccounts[index][2]);
+        double newbalance = currentBalance + amount;
+        bankAccounts[index][2] = String.valueOf(newbalance);
+        System.out.printf("\tNew Balance : Rs.%,.2f\n",Double.valueOf(bankAccounts[index][2]));
+        System.out.println();
+        System.out.printf(SUCCESS_MSG, String.format("%s : %s Deposited Successfully!", bankAccounts[index][0], bankAccounts[index][1]));
+
+        System.out.print("\tDo you want to continue deposit (Y/n)? ");
+        if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) {
+            depositMoney("Deposit Money");
+        } else {
+            dashboard("Welcome to Smart Banking App");
+        }
     }
 
 
@@ -136,5 +177,38 @@ public class SmartBankingApp {
             }
         }
         return true;
+    }
+
+    public static int accountNumberSearch(String accNumber) {
+        int index = -1;
+        
+        if (accNumber.isBlank()){
+            System.out.printf(ERROR_MSG, "Account Number can't be empty");
+            return index;
+        }else if (!accNumber.startsWith("SDB-") || accNumber.length() < 5){
+            System.out.printf(ERROR_MSG, "Invalid Account Number format");
+            return index;
+        }else{
+            String number = accNumber.substring(4);
+            for (int i = 0; i < number.length(); i++) {
+                if (!Character.isDigit(number.charAt(i))){
+                    System.out.printf(ERROR_MSG, "Invalid Account Number format");
+                    return index;
+                }
+            }
+            boolean exists = false;
+            for (int i = 0; i < bankAccounts.length; i++) {
+                if (bankAccounts[i][0].equals(accNumber)){
+                    index = i;
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists){
+                    System.out.printf(ERROR_MSG, "Account Number does not exist");
+                    return index;
+            }
+            return index;
+        }
     }
 }
