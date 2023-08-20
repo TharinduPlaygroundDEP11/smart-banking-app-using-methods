@@ -29,7 +29,7 @@ public class SmartBankingApp {
             case 3: withdrawMoney("Withdraw Money"); break;
             case 4: transferMoney("Transfer Money"); break;
             case 5: checkBalance("Check Account Balance");break;
-            case 6: dropAccount("Drop Account"); break;
+            case 6: dropAccount("Delete Existing Account"); break;
             case 7: System.exit(0); break;
             default: break;
         }
@@ -274,6 +274,45 @@ public class SmartBankingApp {
 
     public static void dropAccount(String title) {
         appTitle(title);
+        String accNumber;
+        int index;
+        do{
+            System.out.print("\tEnter the Account Number to Delete account : ");
+            accNumber = SCANNER.nextLine().toUpperCase().strip();
+            index = accountNumberSearch(accNumber);
+        } while (index == -1);
+
+        double accBalance = Double.valueOf(bankAccounts[index][2]);
+        String[][] dropedBankAccounts = new String[bankAccounts.length - 1][3];
+
+        System.out.printf("\n\tAccount Holder : %s\n",bankAccounts[index][1]);
+        System.out.printf("\tAccount Balance : Rs.%,.2f\n",accBalance);
+        System.out.println();
+        System.out.print("\tAre you sure want to delete this account? (Y/n) ");
+
+        if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) {
+            for (int i = 0; i < bankAccounts.length; i++) {
+                if (i < index){
+                    dropedBankAccounts[i] = bankAccounts[i];
+                }else if (i == index){
+                    continue;
+                }else{
+                    dropedBankAccounts[i-1] = bankAccounts[i];
+                }
+            }
+            bankAccounts = dropedBankAccounts;
+
+            System.out.println();
+            System.out.printf(SUCCESS_MSG, "Account has been deleted successfully");
+            System.out.print("\n\tDo you want to continue delete (Y/n)? ");
+            if (SCANNER.nextLine().strip().toUpperCase().equals("Y")){
+                dropAccount("Delete Existing Account");
+            }else {
+                dashboard("Welcome to Smart Banking App");
+            } 
+        } else {
+            dashboard("Welcome to Smart Banking App");
+        }
     }
     
     
