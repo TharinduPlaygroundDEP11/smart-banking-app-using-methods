@@ -94,14 +94,14 @@ public class SmartBankingApp {
             index = accountNumberSearch(accNumber);
         } while (index == -1);
         
-        System.out.printf("\tAccount Holder : %s\n",bankAccounts[index][1]);
+        System.out.printf("\n\tAccount Holder : %s\n",bankAccounts[index][1]);
         System.out.printf("\tCurrent Balance : Rs.%,.2f\n",Double.valueOf(bankAccounts[index][2]));
 
         boolean valid;
         double amount;
         do {
             valid = true;
-            System.out.print("\tEnter Your Deposit Amount : ");
+            System.out.print("\n\tEnter Your Deposit Amount : ");
             
             amount = SCANNER.nextDouble();
             SCANNER.nextLine();
@@ -116,11 +116,11 @@ public class SmartBankingApp {
         double currentBalance = Double.valueOf(bankAccounts[index][2]);
         double newbalance = currentBalance + amount;
         bankAccounts[index][2] = String.valueOf(newbalance);
-        System.out.printf("\tNew Balance : Rs.%,.2f\n",Double.valueOf(bankAccounts[index][2]));
+        System.out.printf("\n\tNew Balance : Rs.%,.2f\n",Double.valueOf(bankAccounts[index][2]));
         System.out.println();
         System.out.printf(SUCCESS_MSG, String.format("%s : %s Deposited Successfully!", bankAccounts[index][0], bankAccounts[index][1]));
 
-        System.out.print("\tDo you want to continue deposit (Y/n)? ");
+        System.out.print("\n\tDo you want to continue deposit (Y/n)? ");
         if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) {
             depositMoney("Deposit Money");
         } else {
@@ -139,7 +139,7 @@ public class SmartBankingApp {
             index = accountNumberSearch(accNumber);
         } while (index == -1);
 
-        System.out.printf("\tAccount Holder : %s\n",bankAccounts[index][1]);
+        System.out.printf("\n\tAccount Holder : %s\n",bankAccounts[index][1]);
         System.out.printf("\tCurrent Balance : Rs.%,.2f\n",Double.valueOf(bankAccounts[index][2]));
 
         boolean valid;
@@ -147,7 +147,7 @@ public class SmartBankingApp {
         double currentBalance = Double.valueOf(bankAccounts[index][2]);
         do {
             valid = true;
-            System.out.print("\tEnter Your Withdraw Amount : ");
+            System.out.print("\n\tEnter Your Withdraw Amount : ");
             amount = SCANNER.nextDouble();
             SCANNER.nextLine();
             
@@ -165,11 +165,11 @@ public class SmartBankingApp {
 
         double newbalance = currentBalance - amount;
         bankAccounts[index][2] = String.valueOf(newbalance);
-        System.out.printf("\tNew Balance : Rs.%,.2f\n",Double.valueOf(bankAccounts[index][2]));
+        System.out.printf("\n\tNew Balance : Rs.%,.2f\n",Double.valueOf(bankAccounts[index][2]));
         System.out.println();
-        System.out.printf(SUCCESS_MSG, String.format("%s : %s Deposited Successfully!", bankAccounts[index][0], bankAccounts[index][1]));
+        System.out.printf(SUCCESS_MSG, String.format("%s : %s Withdrawed Successfully!", bankAccounts[index][0], bankAccounts[index][1]));
 
-        System.out.print("\tDo you want to continue withdraw (Y/n)? ");
+        System.out.print("\n\tDo you want to continue withdraw (Y/n)? ");
         if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) {
             withdrawMoney("Withdraw Money");
         } else {
@@ -199,10 +199,10 @@ public class SmartBankingApp {
         double fromAccBalance = Double.valueOf(bankAccounts[indexFrom][2]);
         double toAccBalance = Double.valueOf(bankAccounts[indexTo][2]);
 
-        System.out.printf("\tFrom Account Holder : %s\n",bankAccounts[indexFrom][1]);
+        System.out.printf("\n\tFrom Account Holder : %s\n",bankAccounts[indexFrom][1]);
         System.out.printf("\tFrom Account Current Balance : Rs.%,.2f\n",fromAccBalance);
         System.out.println();
-        System.out.printf("\tTo Account Holder : %s\n",bankAccounts[indexTo][2]);
+        System.out.printf("\n\tTo Account Holder : %s\n",bankAccounts[indexTo][2]);
         System.out.printf("\tTo Account Current Balance : Rs.%,.2f\n",toAccBalance);
 
         boolean valid;
@@ -231,12 +231,12 @@ public class SmartBankingApp {
         bankAccounts[indexFrom][2] = String.valueOf(newFromAccBalance);
         bankAccounts[indexTo][2] = String.valueOf(newToAccBalance);
 
-        System.out.printf("\tFrom Account New Balance : Rs.%,.2f\n",newFromAccBalance);
+        System.out.printf("\n\tFrom Account New Balance : Rs.%,.2f\n",newFromAccBalance);
         System.out.printf("\tTo Account New Balance : Rs.%,.2f\n",newToAccBalance);
         System.out.println();
         System.out.printf(SUCCESS_MSG, "Money Transfer Successfull! (2% bank chargers deducted)");
         
-        System.out.print("\tDo you want to continue transfer (Y/n)? ");
+        System.out.print("\n\tDo you want to continue transfer (Y/n)? ");
         if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) {
             transferMoney("Transfer Money");
         }else {
