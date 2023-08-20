@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class SmartBankingApp {
@@ -6,10 +5,11 @@ public class SmartBankingApp {
     private static String[][] bankAccounts = new String[0][];
     private static final String CLEAR = "\033[H\033[2J";
     private static final String COLOR_RED_BOLD = "\033[31;1m";
-    private static final String COLOR_GREEN_BOLD = "\033[33;1m";
+    private static final String COLOR_YELLOW_BOLD = "\033[33;1m";
+    private static final String COLOR_BLUE_BOLD = "\033[34;1m";
     private static final String RESET = "\033[0;0m";
     private static final String ERROR_MSG = String.format("\t%s%s%s\n", COLOR_RED_BOLD, "%s", RESET);
-    private static final String SUCCESS_MSG = String.format("\t%s%s%s\n", COLOR_GREEN_BOLD, "%s", RESET);
+    private static final String SUCCESS_MSG = String.format("\t%s%s%s\n", COLOR_YELLOW_BOLD, "%s", RESET);
     public static void main(String[] args) {
         dashboard("Welcome to Smart Banking App");
         
@@ -76,10 +76,6 @@ public class SmartBankingApp {
         bankAccounts = newBankAccount;
         
         System.out.printf(SUCCESS_MSG, String.format("\n\t%s : %s Added Successfully!", formattedNumber, name));
-
-        for (int i = 0; i < bankAccounts.length; i++) {
-            System.out.println(Arrays.toString(bankAccounts[i]));
-        }
 
         System.out.print("\nDo you want to go back? (Y/n) : ");
         if(SCANNER.nextLine().strip().toUpperCase().equals("Y")){
@@ -252,6 +248,27 @@ public class SmartBankingApp {
 
     public static void checkBalance(String title) {
         appTitle(title);
+        String accNumber;
+        int index;
+        do{
+            System.out.print("\tEnter the Account Number to check balance : ");
+            accNumber = SCANNER.nextLine().toUpperCase().strip();
+            index = accountNumberSearch(accNumber);
+        } while (index == -1);
+
+        double accBalance = Double.valueOf(bankAccounts[index][2]);
+
+        System.out.printf("\n\t%sAccount Holder : %s\n",COLOR_BLUE_BOLD,bankAccounts[index][1]);
+        System.out.printf("\tAccount Current Balance : Rs.%,.2f\n",accBalance);
+        System.out.println();
+        System.out.printf("\tAvailable Balance to Withdraw : Rs.%,.2f%s\n", (accBalance - 500),RESET);
+                    
+        System.out.print("\n\tDo you want to continue checking balance (Y/n)? ");
+        if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) {
+            checkBalance("Check Account Balance");
+        } else {
+            dashboard("Welcome to Smart Banking App");
+        }
     }
 
 
