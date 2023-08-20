@@ -135,6 +135,50 @@ public class SmartBankingApp {
 
     public static void withdrawMoney(String title) {
         appTitle(title);
+        String accNumber;
+        int index;
+        do{
+            System.out.print("\tEnter the Account Number : ");
+            accNumber = SCANNER.nextLine().toUpperCase().strip();
+            index = accountNumberSearch(accNumber);
+        } while (index == -1);
+
+        System.out.printf("\tAccount Holder : %s\n",bankAccounts[index][1]);
+        System.out.printf("\tCurrent Balance : Rs.%,.2f\n",Double.valueOf(bankAccounts[index][2]));
+
+        boolean valid;
+        double amount;
+        double currentBalance = Double.valueOf(bankAccounts[index][2]);
+        do {
+            valid = true;
+            System.out.print("\tEnter Your Withdraw Amount : ");
+            amount = SCANNER.nextDouble();
+            SCANNER.nextLine();
+            
+            if(amount < 100) {
+                System.out.printf(ERROR_MSG, "Invalid withdrawal, withdraw should be more than Rs.100/=");
+                valid = false;
+                continue;
+            }
+            if((currentBalance - amount) < 500){
+                System.out.printf(ERROR_MSG, "Invalid withdrawal, Remaining balance should be more than Rs.500/=");
+                valid = false;
+                continue;
+            }
+        } while (!valid);
+
+        double newbalance = currentBalance - amount;
+        bankAccounts[index][2] = String.valueOf(newbalance);
+        System.out.printf("\tNew Balance : Rs.%,.2f\n",Double.valueOf(bankAccounts[index][2]));
+        System.out.println();
+        System.out.printf(SUCCESS_MSG, String.format("%s : %s Deposited Successfully!", bankAccounts[index][0], bankAccounts[index][1]));
+
+        System.out.print("\tDo you want to continue withdraw (Y/n)? ");
+        if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) {
+            withdrawMoney("Withdraw Money");
+        } else {
+            dashboard("Welcome to Smart Banking App");
+        }
     }
 
 
@@ -205,9 +249,13 @@ public class SmartBankingApp {
                 }
             }
             if (!exists){
-                    System.out.printf(ERROR_MSG, "Account Number does not exist");
+                System.out.printf(ERROR_MSG, "Account Number does not exist");
+                System.out.print("\n\tDo you want to try again? (Y/n)");
+                if (SCANNER.nextLine().strip().toUpperCase().equals("Y")){
                     return index;
+                }else dashboard("Welcome to Smart Banking App");
             }
+            
             return index;
         }
     }
